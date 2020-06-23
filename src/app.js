@@ -43,11 +43,13 @@ app.put("/repositories/:id", (request, response) => {
   const { title, url, techs } = request.body;
 
   const repositoryIndex = repositories.findIndex( repository => repository.id === id);
-  const likes = repositories.findIndex( repository => repository.id === id);
-
+  
   if(repositoryIndex < 0) {
     return response.status(400).json({ error: 'Repositorie not found!' });
   }
+
+  const likes = repositories[repositoryIndex].likes;
+  //console.log("Numero de likes na edição",likes);
 
   const repository = {
     id,
@@ -57,9 +59,9 @@ app.put("/repositories/:id", (request, response) => {
     likes
   }
 
-  console.log(repository);
+  //console.log(repository);
   repositories[repositoryIndex] = repository;
-  console.log(repositories);
+  //console.log(repositories);
 
   return response.json(repository);
 });
