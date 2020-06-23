@@ -22,9 +22,9 @@ app.get("/repositories", (request, response) => {
 
   const results = title
     ? repositories.filter( repositorie => repositorie.title.includes(title))
-    : repositorie;
+    : repositories;
 
-  return response.joson(results);
+  return response.json(results);
 
 });
 
@@ -99,5 +99,8 @@ app.post("/repositories/:id/like", (request, response) => {
 
   return response.json(repositorie);
 });
+
+//implementar rota para dislike
+// 
 
 module.exports = app;
