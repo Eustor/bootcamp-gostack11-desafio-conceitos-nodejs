@@ -43,6 +43,7 @@ app.put("/repositories/:id", (request, response) => {
   const { title, url, techs } = request.body;
 
   const repositorieIndex = repositories.findIndex( repositorie => repositorie.id === id);
+  const likes = repositories.findIndex( repositorie => repositorie.id === id);
 
   if(repositorieIndex < 0) {
     return response.status(400).json({ error: 'Repositorie not found!' });
@@ -53,8 +54,10 @@ app.put("/repositories/:id", (request, response) => {
     title,
     url,
     techs,
-    likes,
+    likes
   }
+
+  //console.log(repositorie);
 
   repositories[repositorieIndex] = repositorie;
 
@@ -77,7 +80,6 @@ app.delete("/repositories/:id", (request, response) => {
 
 app.post("/repositories/:id/like", (request, response) => {
   const { id } = request.params;
-  const { title, url, techs } = request.body;
 
   const repositorieIndex = repositories.findIndex( repositorie => repositorie.id === id);
 
@@ -85,22 +87,56 @@ app.post("/repositories/:id/like", (request, response) => {
     return response.status(400).json({ error: 'Repositorie not found!' });
   }
 
-  repositorieIndex.likes = repositorieIndex.likes + 1;
+  repositories[repositorieIndex].likes += 1;
+  //console.log("N. de Likes", repositories[repositorieIndex].likes);
+  return response.json(repositories[repositorieIndex]);
+});
 
+app.delete("/repositories/:id/dislike", (request, response) => {
+  const { id } = request.params;
+
+  const repositorieIndex = repositories.findIndex( repositorie => repositorie.id === id);
+
+  if(repositorieIndex < 0) {
+    return response.status(400).json({ error: 'Repositorie not found!' });
+  }
+
+  repositories[repositorieIndex].likes -= 1;
+  return response.json(repositories[repositorieIndex]);
+});
+
+module.exports = app;
+
+/** 
+//teria que passar todo o objeto fo front-end para poder realizar a alteração todas as vezes
+app.post("/repositories/:id/like", (request, response) => {
+  const { id } = request.params;
+  const { title, url, techs, likes } = request.body;
+
+  const repositorieIndex = repositories.findIndex( repositorie => repositorie.id === id);
+
+  //const likes = repositories.findIndex( repositorie => repositorie.id === id);
+  //console.log("N. de Likes", likes);
+  if(repositorieIndex < 0) {
+    return response.status(400).json({ error: 'Repositorie not found!' });
+  }
+
+  //likes++;
+  //console.log("N. de Likes", likes);
   const repositorie = {
     id,
     title,
     url,
     techs,
-    likes,
+    likes
   }
+  repositorie.likes += 1;
 
   repositories[repositorieIndex] = repositorie;
-
+  console.log("N. de Likes", repositories[repositorieIndex].likes);
   return response.json(repositorie);
 });
+*/
 
 //implementar rota para dislike
 // 
-
-module.exports = app;
